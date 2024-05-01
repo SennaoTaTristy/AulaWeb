@@ -1,6 +1,8 @@
 package com.example.projeto.models;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import com.example.projeto.enums.TipoOferta;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,23 +24,33 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="ofertas")
-public class OfertaModel implements Serializable{
+@Table(name = "ofertas")
+public class OfertaModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
+
+    private BigDecimal valorOriginal;
+
+    private LocalDateTime expiracao;
+
+    @ManyToOne
+    private DescontoModel desconto;
 
     private Integer tipoOferta;
 
     private double valor;
 
     @ManyToOne
-    @JoinColumn(name="imovel_id")
+    @JoinColumn(name = "imovel_id")
     @JsonIgnore
     private ImovelModel imovelModel;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private UserModel userModel;
 
     public TipoOferta getTipoOferta() {
         return TipoOferta.toEnum(tipoOferta);
@@ -47,7 +59,4 @@ public class OfertaModel implements Serializable{
     public void setTipoUsuario(TipoOferta tipoOferta) {
         this.tipoOferta = tipoOferta.getCodigo();
     }
-
-       
-    
 }
